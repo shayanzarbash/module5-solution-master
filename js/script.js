@@ -14,12 +14,10 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
   var dc = {};
 
   var homeHtmlUrl = "snippets/home-snippet.html";
-  var allCategoriesUrl =
-    "https://coursera-jhu-default-rtdb.firebaseio.com/categories.json";
+  var allCategoriesUrl = "https://coursera-jhu-default-rtdb.firebaseio.com/categories.json";
   var categoriesTitleHtml = "snippets/categories-title-snippet.html";
   var categoryHtml = "snippets/category-snippet.html";
-  var menuItemsUrl =
-    "https://coursera-jhu-default-rtdb.firebaseio.com/menu_items/";
+  var menuItemsUrl = "https://coursera-jhu-default-rtdb.firebaseio.com/menu_items/";
   var menuItemsTitleHtml = "snippets/menu-items-title.html";
   var menuItemHtml = "snippets/menu-item.html";
 
@@ -36,14 +34,14 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
     insertHtml(selector, html);
   };
 
-  // Return substitute of '{{propName}}' 
-  // with propValue in given 'string' 
+  // Return substitute of '{{propName}}'
+  // with propValue in given 'string'
   var insertProperty = function (string, propName, propValue) {
     var propToReplace = "{{" + propName + "}}";
     string = string
       .replace(new RegExp(propToReplace, "g"), propValue);
     return string;
-  }
+  };
 
   // Remove the class 'active' from home and switch to Menu button
   var switchMenuToActive = function () {
@@ -54,7 +52,7 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
 
     // Add 'active' to menu button if not already there
     classes = document.querySelector("#navMenuButton").className;
-    if (classes.indexOf("active") == -1) {
+    if (classes.indexOf("active") === -1) {
       classes += " active";
       document.querySelector("#navMenuButton").className = classes;
     }
@@ -63,10 +61,10 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
   // On page load (before images or CSS)
   document.addEventListener("DOMContentLoaded", function (event) {
 
-    // TODO: STEP 0: Look over the code from 
-    // *** start *** 
-    // to 
-    // *** finish *** 
+    // TODO: STEP 0: Look over the code from
+    // *** start ***
+    // to
+    // *** finish ***
     // below.
     // We changed this code to retrieve all categories from the server instead of
     // simply requesting home HTML snippet. We now also have another function
@@ -75,7 +73,7 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
     // random category into the home HTML snippet, and then insert that snippet into our
     // main page (index.html).
     //
-    // TODO: STEP 1: Substitute [...] below with the *value* of the function buildAndShowHomeHTML, 
+    // TODO: STEP 1: Substitute [...] below with the *value* of the function buildAndShowHomeHTML,
     // so it can be called when server responds with the categories data.
 
     // *** start ***
@@ -84,7 +82,7 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
     $ajaxUtils.sendGetRequest(
       allCategoriesUrl,
       buildAndShowHomeHTML, // ***** <---- TODO: STEP 1: Substitute [...] ******
-      true); // Explicitely setting the flag to get JSON from server processed into an object literal
+      true); // Explicitly setting the flag to get JSON from server processed into an object literal
   });
   // *** finish **
 
@@ -97,13 +95,15 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
     $ajaxUtils.sendGetRequest(
       homeHtmlUrl,
       function (homeHtml) {
-        console.log("hello")
+
         // TODO: STEP 2: Here, call chooseRandomCategory, passing it retrieved 'categories'
         // Pay attention to what type of data that function returns vs what the chosenCategoryShortName
         // variable's name implies it expects.
-        // var chosenCategoryShortName = ....
-        var chosenCategoryShortName = chooseRandomCategory(categories).short_name;
-        console.log(chosenCategoryShortName);
+
+        var chosenCategoryShortName = chooseRandomCategory(categories)
+        var shortnamewithquotes = "'" + chosenCategoryShortName.short_name + "'"
+        console.log("Short name: " + shortnamewithquotes)
+
         // TODO: STEP 3: Substitute {{randomCategoryShortName}} in the home html snippet with the
         // chosen category from STEP 2. Use existing insertProperty function for that purpose.
         // Look through this code for an example of how to do use the insertProperty function.
@@ -114,14 +114,18 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
         // $dc.loadMenuItems('L')
         // Hint: you need to surround the chosen category short name with something before inserting
         // it into the home html snippet.
-        // 
-        // var homeHtmlToInsertIntoMainPage = ....
-        var homeHtmlToInsertIntoMainPage = insertProperty(homeHtml, "randomCategoryShortName", "'" + chosenCategoryShortName + "'")
+        //
+        var homeHtmlToInsertIntoMainPage = insertProperty(
+          homeHtml,
+          "randomCategoryShortName",
+          shortnamewithquotes)
+        console.log("homeHtml..." + homeHtmlToInsertIntoMainPage)
 
-        // TODO: STEP 4: Insert the the produced HTML in STEP 3 into the main page
+        // TODO: STEP 4: Insert the produced HTML in STEP 3 into the main page
         // Use the existing insertHtml function for that purpose. Look through this code for an example
-        // of how to do that. 
+        // of how to do that.
         // ....
+
         insertHtml("#main-content", homeHtmlToInsertIntoMainPage);
 
       },
@@ -153,7 +157,7 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
   dc.loadMenuItems = function (categoryShort) {
     showLoading("#main-content");
     $ajaxUtils.sendGetRequest(
-      menuItemsUrl + categoryShort,
+      menuItemsUrl + categoryShort + ".json",
       buildAndShowMenuItemsHTML);
   };
 
@@ -296,7 +300,7 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
           menuItems[i].description);
 
       // Add clearfix after every second menu item
-      if (i % 2 != 0) {
+      if (i % 2 !== 0) {
         html +=
           "<div class='clearfix visible-lg-block visible-md-block'></div>";
       }
@@ -315,7 +319,7 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
     priceValue) {
     // If not specified, replace with empty string
     if (!priceValue) {
-      return insertProperty(html, pricePropName, "");;
+      return insertProperty(html, pricePropName, "");
     }
 
     priceValue = "$" + priceValue.toFixed(2);
